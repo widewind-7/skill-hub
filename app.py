@@ -647,13 +647,14 @@ async def list_skills(q: str = "", category: str = "", show_all: bool = False):
     skills = scan_all_skills()
     result = list(skills.values())
 
-    # 默认隐藏子 skill
+    # 默认隐藏子 skill，但搜索时显示匹配的子 skill
     if not show_all:
-        result = [s for s in result if not s.parent]
-
-    if q:
-        q = q.lower()
-        result = [s for s in result if q in s.name.lower() or q in s.description.lower()]
+        if q:
+            q_lower = q.lower()
+            # 搜索时：显示顶层 skill + 名称/描述匹配的子 skill
+            result = [s for s in result if not s.parent or q_lower in s.name.lower() or q_lower in s.description.lower()]
+        else:
+            result = [s for s in result if not s.parent]
 
     if category and category != "全部":
         result = [s for s in result if s.category == category]
