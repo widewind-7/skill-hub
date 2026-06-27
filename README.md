@@ -2,6 +2,10 @@
 
 本地 Skills 管理系统 — 浏览、搜索、同步你的所有 Agent Skills。
 
+![Skills 页面](screenshots/skills.png)
+![发现新 Skill](screenshots/discover.png)
+![Trending](screenshots/trending.png)
+
 ## 功能
 
 - **Skills 管理** — 浏览、搜索、分类查看已安装的 Agent Skills
