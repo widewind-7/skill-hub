@@ -651,8 +651,8 @@ async def list_skills(q: str = "", category: str = "", show_all: bool = False):
     if not show_all:
         if q:
             q_lower = q.lower()
-            # 搜索时：显示顶层 skill + 名称/描述匹配的子 skill
-            result = [s for s in result if not s.parent or q_lower in s.name.lower() or q_lower in s.description.lower()]
+            # 搜索时：只返回名称或描述匹配的（含子 skill）
+            result = [s for s in result if q_lower in s.name.lower() or q_lower in s.description.lower()]
         else:
             result = [s for s in result if not s.parent]
 
