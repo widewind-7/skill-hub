@@ -923,6 +923,8 @@ let trendingSince = 'daily';
 
 // ── 初始化 ──────────────────────
 async function init() {
+  const cfg = await fetchJSON(`${API}/api/config`);
+  _translateAvailable = cfg.translate_available;
   agents = await fetchJSON(`${API}/api/agents`);
   cachedCategories = await fetchJSON(`${API}/api/categories`);
   renderViewToggle();
@@ -1117,7 +1119,7 @@ async function openDetail(name) {
   // 检测是否需要翻译：无中文简介，或中文简介实际是英文
   const zhText = data.summary_zh || '';
   const cnCount = (zhText.match(/[一-鿿]/g) || []).length;
-  const needsTranslate = data.description && (!zhText || (zhText.length > 10 && cnCount / zhText.length < 0.15));
+  const needsTranslate = _translateAvailable && data.description && (!zhText || (zhText.length > 10 && cnCount / zhText.length < 0.15));
 
   modal.innerHTML = `
     <button class="modal-close" onclick="closeModal()">✕</button>
@@ -1305,6 +1307,7 @@ async function selectAgent(name) {
 
 // ── 发现新 Skill ──────────────────────
 let _discoverLoaded = false;
+let _translateAvailable = false;
 async function loadDiscover() {
   const grid = document.getElementById('discover-grid');
   if (!_discoverLoaded) {
@@ -1343,7 +1346,7 @@ function renderDiscover(skills) {
   const page = skills.slice(start, start + DISCOVER_PAGE_SIZE);
   grid.innerHTML = page.map((s, i) => {
     const desc = s.description || s.description_zh || '';
-    const needsTranslate = desc.length > 10 && (desc.match(/[一-鿿]/g) || []).length / desc.length < 0.15;
+    const needsTranslate = _translateAvailable && desc.length > 10 && (desc.match(/[一-鿿]/g) || []).length / desc.length < 0.15;
     return `
     <div class="card" onclick="openDiscoverDetail(${start + i})">
       <div class="skill-name">${escHtml(s.name)}</div>

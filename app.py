@@ -845,6 +845,11 @@ async def list_categories():
     return [{"name": k, "count": v} for k, v in sorted(cats.items(), key=lambda x: -x[1])]
 
 
+@app.get("/api/config")
+async def get_config():
+    return {"translate_available": bool(BAIDU_APPID and BAIDU_KEY)}
+
+
 @app.post("/api/open-path")
 async def open_path(body: dict):
     """Open a local folder in Explorer/Finder."""
