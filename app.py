@@ -884,6 +884,9 @@ async def translate_skill(body: dict):
     if not name or not desc:
         raise HTTPException(400, "name and desc are required")
 
+    if not BAIDU_APPID or not BAIDU_KEY:
+        raise HTTPException(400, "未配置百度翻译 API，请在 .env 中填写 BAIDU_APPID 和 BAIDU_KEY（申请地址：https://fanyi-api.baidu.com/product/11）")
+
     # Cache key = name + description (different repos may have same name, different desc)
     cache_key = hashlib.md5((name + desc[:200]).encode()).hexdigest()
 
