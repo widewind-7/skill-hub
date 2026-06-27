@@ -545,7 +545,7 @@ def _do_scan() -> dict[str, SkillMeta]:
                 skills[m].parent = parent_type
                 skills[parent_type].children.append(m)
 
-    # 第二轮：按名称前缀分组（兜底）
+    # 第二轮：按名称前缀分组（阈值 5+，捕获 cheat-*、video-*、gsap-* 等大家族）
     prefix_groups: dict[str, list[str]] = {}
     for name in skills:
         if skills[name].parent:
@@ -556,22 +556,27 @@ def _do_scan() -> dict[str, SkillMeta]:
             prefix_groups.setdefault(prefix, []).append(name)
 
     for prefix, members in prefix_groups.items():
-        if len(members) < 3:
+        if len(members) < 4:
             continue
-        if prefix in members:
-            parent_name = prefix
-        else:
-            parent_name = max(members, key=lambda n: len(skills[n].installed_in))
+        natural_parent = prefix if prefix in members else None
+        if not natural_parent:
+            for candidate in [f"{prefix}-on-content", f"{prefix}-core", f"{prefix}-replication", f"{prefix}-consultation"]:
+                if candidate in members:
+                    natural_parent = candidate
+                    break
+        if not natural_parent:
+            natural_parent = min(members, key=len)
         for m in members:
-            if m == parent_name:
+            if m == natural_parent:
                 continue
             if skills[m].parent:
                 continue
-            skills[m].parent = parent_name
-            skills[parent_name].children.append(m)
+            skills[m].parent = natural_parent
+            skills[natural_parent].children.append(m)
 
-    # 第三轮：解析路由器 skill 的路由表（如 opendesign → creative-director, frontend-design 等）
+    # 第三轮：路由器 skill 检测（通过 SKILL.md 反引号引用，按候选数降序处理）
     scan_dirs = [REPO_DIR] + list(AGENT_DIRS.values())
+    router_candidates = []
     for name, s in skills.items():
         if s.parent:
             continue
@@ -582,14 +587,41 @@ def _do_scan() -> dict[str, SkillMeta]:
                     content = skill_md.read_text(encoding="utf-8", errors="replace")[:8192]
                     refs = set(re.findall(r'`([a-z][a-z0-9-]+)`', content))
                     refs.discard(name)
-                    children = [r for r in refs if r in skills and r != name and not skills[r].parent]
-                    if len(children) >= 2:
-                        for child in children:
-                            skills[child].parent = name
-                            s.children.append(child)
+                    candidates = [r for r in refs if r in skills and r != name and not skills[r].parent]
+                    if len(candidates) >= 2:
+                        router_candidates.append((name, candidates))
                 except Exception:
                     pass
                 break
+
+    router_candidates.sort(key=lambda x: -len(x[1]))
+    for name, candidates in router_candidates:
+        s = skills[name]
+        parent_prefix = name.split("-")[0] if "-" in name else name
+        # 只保留与 parent 有共同前缀的候选
+        domain_children = [c for c in candidates if c.startswith(parent_prefix + "-") or c.startswith(parent_prefix)]
+        if len(domain_children) >= 2:
+            for child in domain_children:
+                if not skills[child].parent:
+                    skills[child].parent = name
+                    s.children.append(child)
+        elif len(candidates) >= 2:
+            # 没有共同前缀时，候选按前缀分组，每组选最长名作为 parent
+            prefix_groups_map: dict[str, list[str]] = {}
+            for c in candidates:
+                cp = c.split("-")[0] if "-" in c else c
+                prefix_groups_map.setdefault(cp, []).append(c)
+            for cp, group in prefix_groups_map.items():
+                if len(group) >= 2:
+                    # 优先选名字含 replication/router/workflow 的，否则选最长名
+                    def _group_score(n):
+                        bonus = 100 if any(k in n for k in ('replication', 'router', 'workflow', 'orchestrat')) else 0
+                        return (bonus, len(n))
+                    group_parent = max(group, key=_group_score)
+                    for child in group:
+                        if child != group_parent and not skills[child].parent:
+                            skills[child].parent = group_parent
+                            skills[group_parent].children.append(child)
 
     return skills
 
