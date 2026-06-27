@@ -25,6 +25,18 @@ python -m uvicorn app:app --host 127.0.0.1 --port 8765
 
 访问 http://localhost:8765
 
+## 翻译功能
+
+翻译功能使用百度翻译 API，需要申请密钥：
+
+1. 前往 [百度翻译开放平台](https://fanyi-api.baidu.com/) 注册并开通「通用翻译」
+2. 在项目根目录创建 `.env` 文件：
+
+```
+BAIDU_APPID=你的APP ID
+BAIDU_KEY=你的密钥
+```
+
 ## 项目结构
 
 ```
