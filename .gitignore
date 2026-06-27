@@ -4,3 +4,4 @@ __pycache__/
 .skill_cache.json
 .trending_cache.json
 .claude/
+.env
