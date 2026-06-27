@@ -1,0 +1,1701 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='85'>🧩</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet">
+<title>Skill Hub</title>
+<style>
+:root {
+  --bg: #f6f2eb;
+  --card-bg: #fffdf9;
+  --border: #e8e0d4;
+  --text: #2c2418;
+  --text-secondary: #6b5f50;
+  --text-muted: #7a6e60;
+  --accent: #2d8a56;
+  --accent-light: #e8f5ee;
+  --accent-hover: #236b43;
+  --tag-bg: #f0ebe2;
+  --tag-text: #6b5e4d;
+  --shadow: 0 1px 2px rgba(100,80,50,0.06);
+  --shadow-hover: 0 8px 24px rgba(100,80,50,0.10);
+  --radius: 14px;
+  --radius-sm: 8px;
+}
+
+[data-theme="dark"] {
+  --bg: #141210;
+  --card-bg: #1c1a17;
+  --border: #2e2a24;
+  --text: #e8e2d8;
+  --text-secondary: #a09585;
+  --text-muted: #8a7e70;
+  --accent: #3daa6f;
+  --accent-light: #1a2e23;
+  --accent-hover: #4cc882;
+  --tag-bg: #252220;
+  --tag-text: #a09585;
+  --shadow: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── 顶部 ─────────────────────────── */
+.header {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+.header h1 {
+  font-family: 'Newsreader', Georgia, 'Times New Roman', serif;
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.theme-toggle {
+  margin-left: auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+  padding: 0;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  background: var(--card-bg);
+}
+
+.theme-toggle svg {
+  width: 20px;
+  height: 20px;
+  stroke: var(--text);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+[data-theme="dark"] .theme-toggle .icon-sun  { display: block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+.theme-toggle .icon-sun  { display: none; }
+.theme-toggle .icon-moon { display: block; }
+
+.header h1 .icon { font-size: 32px; }
+
+.header .subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+  font-style: italic;
+  font-family: 'Newsreader', Georgia, serif;
+}
+
+/* ── 搜索框 ──────────────────────── */
+.search-bar {
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 12px 16px 12px 42px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 14px;
+  background: var(--card-bg);
+  color: var(--text);
+  outline: none;
+  transition: all 0.2s;
+}
+
+.search-bar input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.search-bar .icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 16px;
+}
+
+/* ── 统计栏 ──────────────────────── */
+.stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.02em;
+}
+
+.stat-item .num {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 分类标签 ────────────────────── */
+.categories {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.cat-tag {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  transition: all 0.2s;
+  user-select: none;
+}
+
+.cat-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-light);
+}
+
+.cat-tag.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.cat-tag .count {
+  font-size: 11px;
+  opacity: 0.7;
+  margin-left: 2px;
+}
+
+/* ── 卡片网格 ────────────────────── */
+.grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.card-title {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: -0.01em;
+}
+
+.card-title .symlink-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.card-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.skill-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 4px;
+  max-height: 5em;
+  overflow: hidden;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.card-tag {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  background: var(--tag-bg);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.card-agents {
+  display: flex;
+  gap: 3px;
+}
+
+.card-agent-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  title: attr(data-agent);
+}
+
+.card-agent-dot.installed {
+  background: var(--accent);
+  opacity: 0.6;
+}
+
+/* ── 空状态 ──────────────────────── */
+.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-muted);
+}
+
+.empty .icon { font-size: 48px; margin-bottom: 12px; }
+
+/* ── 详情弹窗 ────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+  display: none;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 20px;
+  overflow-y: auto;
+  backdrop-filter: blur(2px);
+}
+
+.modal-overlay.show {
+  display: flex;
+}
+
+.modal {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  width: 100%;
+  max-width: 700px;
+  padding: 32px;
+  position: relative;
+  animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 24px 48px rgba(0,0,0,0.12);
+  border: 1px solid var(--border);
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: var(--tag-bg);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.15s;
+}
+
+.modal-close:hover {
+  background: var(--border);
+}
+
+.modal-title {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  padding-right: 40px;
+  letter-spacing: -0.02em;
+}
+
+.modal-meta {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.modal-meta .tag {
+  padding: 2px 10px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.modal-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+
+.modal-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+/* 安装状态表 */
+.install-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.install-table th {
+  text-align: left;
+  padding: 8px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.install-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.install-table .status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.status-badge.symlink {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.status-badge.local {
+  background: #fff3e0;
+  color: #e65100;
+}
+
+.status-badge.missing {
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.install-table .btn-small {
+  padding: 3px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--text);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.install-table .btn-small:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.install-table .btn-small.danger:hover {
+  border-color: #c62828;
+  color: #c62828;
+}
+
+/* 操作按钮 */
+.modal-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.btn {
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 500;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btn.primary:hover {
+  background: var(--accent-hover);
+}
+
+.btn.danger {
+  color: #c62828;
+  border-color: #ef9a9a;
+}
+
+.btn.danger:hover {
+  background: #fce4ec;
+}
+
+/* 文件列表 */
+.file-list {
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+
+.file-list div {
+  padding: 2px 0;
+}
+
+/* ── 同步弹窗 ────────────────────── */
+.sync-panel {
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+}
+
+.sync-panel .agent-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted);
+}
+
+/* ── Toast ──────────────────────── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 13px;
+  z-index: 2000;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Agent 面板 ────────────────────── */
+.view-toggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border-bottom: 1.5px solid var(--border);
+}
+
+.view-toggle .tab {
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  position: relative;
+}
+
+.view-toggle .tab:hover {
+  color: var(--text);
+}
+
+.view-toggle .tab:first-child { border-radius: 0; }
+.view-toggle .tab:last-child { border-radius: 0; border-left: none; }
+
+.view-toggle .tab.active {
+  background: transparent;
+  color: var(--accent);
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.view-toggle .tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1.5px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 1px 1px 0 0;
+}
+
+.agent-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 20px;
+  min-height: 500px;
+}
+
+.agent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agent-item {
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s;
+}
+
+.agent-item:hover {
+  background: var(--tag-bg);
+  color: var(--text);
+}
+
+.agent-item.active {
+  background: var(--accent-light);
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.agent-item .badge {
+  font-size: 11px;
+  background: var(--tag-bg);
+  color: var(--text-muted);
+  padding: 1px 7px;
+  border-radius: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.agent-item.active .badge {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  color: var(--accent);
+}
+
+.agent-skills-panel {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.agent-panel-header {
+  font-family: 'Newsreader', Georgia, serif;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.agent-panel-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+
+.agent-skill-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.agent-skill-row:hover {
+  background: var(--bg);
+  margin: 0 -8px;
+  padding-left: 8px;
+  padding-right: 8px;
+  border-radius: 4px;
+}
+
+.agent-skill-row:last-child { border-bottom: none; }
+
+.agent-skill-name {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.agent-skill-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  max-width: 400px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-skill-cat {
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 8px;
+  background: var(--accent-light);
+  color: var(--accent);
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* ── Responsive ──────────────────── */
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+  .header { padding: 20px 16px 0; }
+  .modal { padding: 24px; }
+  .agent-layout { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span class="icon">🔧</span> Skill Hub <button class="theme-toggle" onclick="toggleTheme()" title="切换深色模式"><svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></h1>
+  <div class="subtitle">本地 Skills 管理系统 — 浏览、搜索、同步你的所有 Agent Skills</div>
+
+  <div class="search-bar" id="search-bar-wrap">
+    <span class="icon">🔍</span>
+    <input id="search" type="text" placeholder="搜索 Skill 名称或描述..." autocomplete="off">
+  </div>
+
+  <div class="stats" id="stats"></div>
+  <div class="categories" id="categories"></div>
+  <div class="view-toggle" id="view-toggle"></div>
+</div>
+
+<div id="view-skills">
+  <div class="grid" id="grid">
+    <div class="loading">加载中...</div>
+  </div>
+</div>
+
+<div id="view-agents" style="display:none">
+  <div class="agent-layout" style="max-width:1200px;margin:0 auto;padding:0 24px 40px">
+    <div class="agent-list" id="agent-list"></div>
+    <div class="agent-skills-panel" id="agent-skills-panel">
+      <div style="color:var(--text-muted);padding:40px;text-align:center">← 选择一个 Agent 查看其 Skills</div>
+    </div>
+  </div>
+</div>
+
+<div id="view-discover" style="display:none">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px 40px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <input id="discover-search" type="text" placeholder="搜索可安装的 Skill..." style="flex:1;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;background:var(--card-bg);color:var(--text);outline:none" oninput="filterDiscover()">
+      <button onclick="openRepoManager()" style="margin-left:12px;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px">仓库管理</button>
+    </div>
+    <div class="grid" id="discover-grid"><div class="loading">正在从 GitHub 获取 Skills...</div></div>
+  </div>
+</div>
+
+<div id="view-updates" style="display:none">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px 40px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2 style="margin:0;font-size:18px">可用更新</h2>
+      <div style="display:flex;gap:8px">
+        <button onclick="loadUpdates()" style="padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px">检查更新</button>
+        <button onclick="updateAll()" id="btn-update-all" style="padding:8px 16px;border:none;border-radius:var(--radius);background:var(--accent);color:#fff;cursor:pointer;font-size:13px;display:none">全部更新</button>
+      </div>
+    </div>
+    <div id="updates-list"><div class="loading" style="color:var(--text-muted);padding:40px;text-align:center">点击"检查更新"扫描已安装的 Skill</div></div>
+  </div>
+</div>
+
+<div id="view-trending" style="display:none">
+  <div style="max-width:1200px;margin:0 auto;padding:0 24px 40px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h2 style="margin:0;font-size:18px">GitHub Trending</h2>
+      <div style="display:flex;gap:8px">
+        <select id="trending-since" onchange="trendingSince=this.value;loadTrending()" style="padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card-bg);color:var(--text);font-size:13px;cursor:pointer">
+          <option value="daily">今日</option>
+          <option value="weekly">本周</option>
+          <option value="monthly">本月</option>
+        </select>
+        <button onclick="loadTrending()" style="padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px">刷新</button>
+      </div>
+    </div>
+    <div id="trending-list"><div class="loading">正在加载 Trending...</div></div>
+  </div>
+</div>
+
+<div id="repo-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;justify-content:center;align-items:center">
+  <div style="background:var(--card-bg);border-radius:16px;padding:24px;width:500px;max-height:80vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3)">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <h3 style="margin:0;font-size:16px">仓库管理</h3>
+      <button onclick="document.getElementById('repo-modal').style.display='none'" style="background:none;border:none;font-size:20px;cursor:pointer;color:var(--text)">✕</button>
+    </div>
+    <div id="repo-list" style="margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px">
+      <input id="repo-input" type="text" placeholder="owner/name 或 GitHub URL" style="flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg);color:var(--text);outline:none">
+      <input id="repo-branch" type="text" placeholder="branch" value="main" style="width:80px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;font-size:13px;background:var(--bg);color:var(--text);outline:none">
+      <button onclick="addRepo()" style="padding:8px 16px;border:none;border-radius:8px;background:var(--accent);color:#fff;cursor:pointer;font-size:13px">添加</button>
+    </div>
+  </div>
+</div>
+
+<!-- 详情弹窗 -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── 深色模式 ───────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+}
+
+async function openFolder(path) {
+  try {
+    await fetch('/api/open-path', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({path})
+    });
+  } catch (e) {
+    alert('无法打开文件夹：' + e.message);
+  }
+}
+
+async function translateSkill(name, desc) {
+  const btn = document.getElementById('translate-btn');
+  if (btn) { btn.textContent = '翻译中...'; btn.style.pointerEvents = 'none'; }
+  try {
+    const resp = await fetch('/api/translate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, desc})
+    });
+    const data = await resp.json();
+    if (data.zh) {
+      const zhEl = document.getElementById('modal-desc-zh');
+      if (zhEl) zhEl.innerHTML = escHtml(data.zh) + ' <span style="font-size:12px;color:var(--text-muted);margin-left:4px">&#10003;</span>';
+    } else {
+      alert('翻译失败：' + (data.detail || '未知错误'));
+      if (btn) { btn.textContent = '翻译'; btn.style.pointerEvents = ''; }
+    }
+  } catch (e) {
+    alert('翻译请求失败：' + e.message);
+    if (btn) { btn.textContent = '翻译'; btn.style.pointerEvents = ''; }
+  }
+}
+// 初始化：读取保存的主题，或跟随系统
+(function() {
+  const saved = localStorage.getItem('theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.setAttribute('data-theme', saved || (prefersDark ? 'dark' : 'light'));
+})();
+
+const API = '';
+let allSkills = [];
+let currentCategory = '全部';
+let currentSearch = '';
+let agents = [];
+let cachedCategories = [];
+let currentView = 'skills';
+let selectedAgent = null;
+let skillsPage = 1;
+const SKILLS_PAGE_SIZE = 48;
+let discoverSkills = [];
+let discoverPage = 1;
+const DISCOVER_PAGE_SIZE = 48;
+let updateList = [];
+let trendingRepos = [];
+let trendingSince = 'daily';
+
+// ── 初始化 ──────────────────────
+async function init() {
+  agents = await fetchJSON(`${API}/api/agents`);
+  cachedCategories = await fetchJSON(`${API}/api/categories`);
+  renderViewToggle();
+  await loadSkills();
+  setupSearch();
+}
+
+function renderViewToggle() {
+  document.getElementById('view-toggle').innerHTML = `
+    <div class="tab ${currentView === 'skills' ? 'active' : ''}" onclick="switchView('skills')">全部 Skills</div>
+    <div class="tab ${currentView === 'agents' ? 'active' : ''}" onclick="switchView('agents')">按 Agent 查看</div>
+    <div class="tab ${currentView === 'discover' ? 'active' : ''}" onclick="switchView('discover')">发现新 Skill</div>
+    <div class="tab ${currentView === 'trending' ? 'active' : ''}" onclick="switchView('trending')">Trending</div>
+    <div class="tab ${currentView === 'updates' ? 'active' : ''}" onclick="switchView('updates')">更新</div>
+  `;
+}
+
+function switchView(view) {
+  currentView = view;
+  renderViewToggle();
+  const skillsEl = document.getElementById('view-skills');
+  const agentsEl = document.getElementById('view-agents');
+  const discoverEl = document.getElementById('view-discover');
+  const trendingEl = document.getElementById('view-trending');
+  const updatesEl = document.getElementById('view-updates');
+  const catsEl = document.getElementById('categories');
+  const searchEl = document.getElementById('search-bar-wrap');
+  // Hide all
+  [skillsEl, agentsEl, discoverEl, trendingEl, updatesEl].forEach(el => { if (el) el.style.display = 'none'; });
+  catsEl.style.display = 'none';
+  if (searchEl) searchEl.style.display = 'none';
+  if (view === 'skills') {
+    skillsEl.style.display = '';
+    catsEl.style.display = '';
+    if (searchEl) searchEl.style.display = '';
+  } else if (view === 'agents') {
+    agentsEl.style.display = '';
+    renderAgentList();
+  } else if (view === 'discover') {
+    discoverEl.style.display = '';
+    loadDiscover();
+  } else if (view === 'trending') {
+    trendingEl.style.display = '';
+    loadTrending();
+  } else if (view === 'updates') {
+    updatesEl.style.display = '';
+    loadUpdates();
+  }
+}
+
+async function loadSkills() {
+  const params = new URLSearchParams();
+  if (currentSearch) params.set('q', currentSearch);
+  if (currentCategory && currentCategory !== '全部') params.set('category', currentCategory);
+
+  allSkills = await fetchJSON(`${API}/api/skills?${params}`);
+  skillsPage = 1;
+  renderCategories();
+  renderStats();
+  renderGrid();
+}
+
+// ── 搜索 ────────────────────────
+function setupSearch() {
+  let timer;
+  document.getElementById('search').addEventListener('input', (e) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      currentSearch = e.target.value.trim();
+      loadSkills();
+    }, 250);
+  });
+}
+
+// ── 分类 ────────────────────────
+function renderCategories() {
+  const cats = cachedCategories;
+  const el = document.getElementById('categories');
+  const total = cats.reduce((s, c) => s + c.count, 0);
+
+  let html = `<div class="cat-tag ${currentCategory === '全部' ? 'active' : ''}" onclick="selectCat('全部')">全部 <span class="count">${total}</span></div>`;
+  for (const c of cats) {
+    html += `<div class="cat-tag ${currentCategory === c.name ? 'active' : ''}" onclick="selectCat('${c.name}')">${c.name} <span class="count">${c.count}</span></div>`;
+  }
+  el.innerHTML = html;
+}
+
+function selectCat(cat) {
+  currentCategory = cat;
+  loadSkills();
+}
+
+// ── 统计 ────────────────────────
+function renderStats() {
+  const total = allSkills.length;
+  const installed = new Set();
+  let totalLinks = 0;
+  for (const s of allSkills) {
+    for (const [ag, info] of Object.entries(s.installed_in)) {
+      installed.add(ag);
+      if (info.is_symlink) totalLinks++;
+    }
+  }
+  document.getElementById('stats').innerHTML = `
+    <div class="stat-item">📦 共 <span class="num">${total}</span> 个 Skill</div>
+    <div class="stat-item">🔗 <span class="num">${totalLinks}</span> 个 Symlink</div>
+    <div class="stat-item">🤖 <span class="num">${installed.size}</span> 个 Agent</div>
+  `;
+}
+
+// ── 卡片网格 ────────────────────
+function renderGrid() {
+  const grid = document.getElementById('grid');
+  if (!allSkills.length) {
+    grid.innerHTML = `<div class="empty"><div class="icon">📭</div><div>没有找到匹配的 Skill</div></div>`;
+    return;
+  }
+
+  const totalPages = Math.ceil(allSkills.length / SKILLS_PAGE_SIZE);
+  if (skillsPage > totalPages) skillsPage = totalPages;
+  const start = (skillsPage - 1) * SKILLS_PAGE_SIZE;
+  const page = allSkills.slice(start, start + SKILLS_PAGE_SIZE);
+
+  grid.innerHTML = page.map(s => {
+    const desc = s.summary_zh || s.description || '暂无描述';
+    const agentCount = Object.keys(s.installed_in).length;
+    const childCount = (s.children || []).length;
+    return `
+      <div class="card" onclick="openDetail('${escHtml(s.name)}')">
+        <div class="card-title">
+          ${agentCount > 1 ? '<span class="symlink-dot"></span>' : ''}
+          ${escHtml(s.name)}
+          ${childCount > 0 ? `<span style="font-size:11px;color:var(--accent);font-weight:400;margin-left:4px">+${childCount}</span>` : ''}
+        </div>
+        <div class="card-desc">${escHtml(desc)}</div>
+        <div class="card-footer">
+          <span class="card-tag">${escHtml(s.category)}</span>
+          <span style="font-size:11px;color:var(--text-muted)">安装于 ${agentCount} 个 Agent</span>
+        </div>
+      </div>
+    `;
+  }).join('') + `
+    <div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 0">
+      <button onclick="skillsPageChange(${skillsPage - 1})" ${skillsPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
+      <span style="font-size:13px;color:var(--text-muted)">${skillsPage} / ${totalPages}</span>
+      <button onclick="skillsPageChange(${skillsPage + 1})" ${skillsPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
+    </div>
+  `;
+}
+
+function skillsPageChange(page) {
+  skillsPage = page;
+  renderGrid();
+  document.getElementById('view-skills').scrollIntoView({behavior: 'smooth'});
+}
+
+// ── 详情弹窗 ────────────────────
+async function openDetail(name) {
+  const data = await fetchJSON(`${API}/api/skills/${encodeURIComponent(name)}`);
+  const modal = document.getElementById('modal');
+
+  // 安装状态表
+  const agentRows = agents.map(ag => {
+    const info = data.installed_in[ag.name];
+    let status, statusClass, actions = '';
+    if (!info) {
+      status = '未安装';
+      statusClass = 'missing';
+      actions = `<button class="btn-small" onclick="syncSkill('${escAttr(name)}','${ag.name}')">安装</button>`;
+    } else if (info.is_symlink) {
+      status = 'Symlink';
+      statusClass = 'symlink';
+      actions = `<button class="btn-small danger" onclick="unsyncSkill('${escAttr(name)}','${ag.name}')">移除</button>`;
+    } else {
+      status = '本地副本';
+      statusClass = 'local';
+    }
+    return `<tr>
+      <td>${escHtml(ag.name)}</td>
+      <td><span class="status-badge ${statusClass}">${status}</span></td>
+      <td>${ag.skill_count} skills</td>
+      <td>${actions}</td>
+    </tr>`;
+  }).join('');
+
+  // 文件列表
+  const files = (data.files || []).slice(0, 30).map(f => `<div>📄 ${escHtml(f)}</div>`).join('');
+  const moreFiles = data.files && data.files.length > 30 ? `<div style="color:var(--text-muted)">... 还有 ${data.files.length - 30} 个文件</div>` : '';
+
+  const hasBoth = data.summary_zh && data.description && data.summary_zh !== data.description;
+
+  // 检测是否需要翻译：无中文简介，或中文简介实际是英文
+  const zhText = data.summary_zh || '';
+  const cnCount = (zhText.match(/[一-鿿]/g) || []).length;
+  const needsTranslate = data.description && (!zhText || (zhText.length > 10 && cnCount / zhText.length < 0.15));
+
+  modal.innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">${escHtml(data.name)}</div>
+    ${hasBoth ? `
+      <div class="lang-toggle" style="display:flex;gap:0;margin-bottom:10px">
+        <button class="lang-btn active" onclick="switchLang(this,'zh')" style="padding:3px 12px;font-size:12px;border:1px solid var(--border);border-radius:6px 0 0 6px;background:var(--accent);color:#fff;cursor:pointer">中文</button>
+        <button class="lang-btn" onclick="switchLang(this,'en')" style="padding:3px 12px;font-size:12px;border:1px solid var(--border);border-left:none;border-radius:0 6px 6px 0;background:var(--card-bg);color:var(--text-secondary);cursor:pointer">English</button>
+      </div>
+    ` : ''}
+    <div class="modal-desc" id="modal-desc-zh" style="font-size:15px;font-weight:500;color:var(--text);margin-bottom:12px;${hasBoth ? '' : ''}">
+      ${escHtml(data.summary_zh || data.description || '暂无说明')}
+      ${needsTranslate ? `<span id="translate-btn" onclick="translateSkill('${escAttr(data.name)}', '${escAttr(data.description || '')}') " style="display:inline-block;margin-left:8px;font-size:12px;color:var(--accent);cursor:pointer;border:1px solid var(--accent);border-radius:4px;padding:2px 8px;vertical-align:middle">翻译</span>` : ''}
+    </div>
+    ${hasBoth ? `<div class="modal-desc" id="modal-desc-en" style="display:none;font-size:14px;color:var(--text-secondary);margin-bottom:12px">${escHtml(data.description)}</div>` : ''}
+    <div class="modal-meta">
+      <span class="tag">${escHtml(data.category)}</span>
+      ${data.version ? `<span>v${escHtml(data.version)}</span>` : ''}
+      ${data.origin ? `<span>来源: ${escHtml(data.origin)}</span>` : ''}
+      <span>${data.file_count} 个文件</span>
+      ${data.homepage ? `<a href="${escAttr(data.homepage)}" target="_blank" style="color:var(--accent);text-decoration:none;font-size:13px">🔗 源码</a>` : ''}
+    </div>
+
+    <div class="modal-section-title">安装状态</div>
+    <table class="install-table">
+      <thead><tr><th>Agent</th><th>状态</th><th>Skills 数</th><th>操作</th></tr></thead>
+      <tbody>${agentRows}</tbody>
+    </table>
+
+    ${data.files && data.files.length ? `
+      <div class="modal-section-title">文件结构</div>
+      <div class="file-list">${files}${moreFiles}</div>
+    ` : ''}
+
+    ${data.children_info && data.children_info.length ? `
+      <div class="modal-section-title">包含子 Skill (${data.children_info.length})</div>
+      <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:16px">
+        ${data.children_info.map(c => `
+          <div style="padding:10px 14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer" onclick="closeModal();setTimeout(()=>openDetail('${escAttr(c.name)}'),200)">
+            <div style="font-weight:600;font-size:13px;margin-bottom:2px">${escHtml(c.name)}</div>
+            <div style="font-size:12px;color:var(--text-secondary)">${escHtml(c.summary_zh || c.description || '暂无说明')}</div>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    <div class="modal-actions">
+      <button class="btn" onclick="openFolder('${escAttr(data.source_path)}')" style="background:var(--card-bg);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:8px;font-size:13px;cursor:pointer">📂 打开文件位置</button>
+    </div>
+  `;
+
+  document.getElementById('modal-overlay').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('show');
+}
+
+function switchLang(btn, lang) {
+  const zh = document.getElementById('modal-desc-zh');
+  const en = document.getElementById('modal-desc-en');
+  const btns = btn.parentElement.querySelectorAll('.lang-btn');
+  if (lang === 'zh') {
+    zh.style.display = '';
+    en.style.display = 'none';
+    btns[0].classList.add('active');
+    btns[0].style.background = 'var(--accent)';
+    btns[0].style.color = '#fff';
+    btns[1].classList.remove('active');
+    btns[1].style.background = 'var(--card-bg)';
+    btns[1].style.color = 'var(--text-secondary)';
+  } else {
+    zh.style.display = 'none';
+    en.style.display = '';
+    btns[1].classList.add('active');
+    btns[1].style.background = 'var(--accent)';
+    btns[1].style.color = '#fff';
+    btns[0].classList.remove('active');
+    btns[0].style.background = 'var(--card-bg)';
+    btns[0].style.color = 'var(--text-secondary)';
+  }
+}
+
+// 点击遮罩关闭
+document.getElementById('modal-overlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+// ESC 关闭
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// ── API 操作 ────────────────────
+async function syncSkill(name, agent) {
+  const r = await fetch(`${API}/api/skills/${encodeURIComponent(name)}/sync`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ agent }),
+  });
+  const data = await r.json();
+  toast(data.message || data.detail);
+  openDetail(name);
+  loadSkills();
+}
+
+async function unsyncSkill(name, agent) {
+  const r = await fetch(`${API}/api/skills/${encodeURIComponent(name)}/unsync`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ agent }),
+  });
+  const data = await r.json();
+  toast(data.message || data.detail);
+  openDetail(name);
+  loadSkills();
+}
+
+async function deleteSkill(name) {
+  if (!confirm(`确定要删除 "${name}" 的所有 symlink 吗？\n（不会删除源文件）`)) return;
+  const r = await fetch(`${API}/api/skills/${encodeURIComponent(name)}`, { method: 'DELETE' });
+  const data = await r.json();
+  toast(data.message || data.detail);
+  closeModal();
+  loadSkills();
+}
+
+// ── 工具函数 ────────────────────
+async function fetchJSON(url) {
+  const r = await fetch(url);
+  return r.json();
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function escAttr(s) {
+  return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2500);
+}
+
+// ── Agent 视图 ─────────────────
+function renderAgentList() {
+  const el = document.getElementById('agent-list');
+  el.innerHTML = agents.map(a =>
+    `<div class="agent-item ${selectedAgent === a.name ? 'active' : ''}" onclick="selectAgent('${a.name}')">
+      <span>${a.name}</span>
+      <span class="badge">${a.skill_count}</span>
+    </div>`
+  ).join('');
+}
+
+async function selectAgent(name) {
+  selectedAgent = name;
+  renderAgentList();
+  const panel = document.getElementById('agent-skills-panel');
+  panel.innerHTML = '<div class="loading">加载中...</div>';
+  const skills = await fetchJSON(`${API}/api/agents/${encodeURIComponent(name)}/skills`);
+  const agent = agents.find(a => a.name === name);
+  panel.innerHTML = `
+    <div class="agent-panel-header">${escHtml(name)}</div>
+    <div class="agent-panel-sub">${escHtml(agent?.path || '')}</div>
+    ${skills.length ? skills.map(s => `
+      <div class="agent-skill-row" onclick="openDetail('${escAttr(s.name)}')">
+        <div>
+          <div class="agent-skill-name">${escHtml(s.name)}</div>
+          <div class="agent-skill-desc">${escHtml(s.summary_zh || s.description || '暂无描述')}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="agent-skill-cat">${escHtml(s.category)}</span>
+          <button onclick="event.stopPropagation();deleteSkill('${escAttr(s.name)}')" style="background:transparent;border:1px solid #e74c3c;color:#e74c3c;border-radius:4px;padding:2px 8px;font-size:11px;cursor:pointer">删除</button>
+        </div>
+      </div>
+    `).join('') : '<div style="color:var(--text-muted);padding:20px;text-align:center">该 Agent 暂无 Skills</div>'}
+  `;
+}
+
+// ── 发现新 Skill ──────────────────────
+let _discoverLoaded = false;
+async function loadDiscover() {
+  const grid = document.getElementById('discover-grid');
+  if (!_discoverLoaded) {
+    grid.innerHTML = '<div class="loading">正在从 GitHub 获取 Skills...</div>';
+  }
+  try {
+    discoverSkills = await fetchJSON(`${API}/api/discover`);
+    discoverPage = 1;
+    _discoverLoaded = true;
+    renderDiscover(discoverSkills);
+  } catch (e) {
+    if (!_discoverLoaded) {
+      grid.innerHTML = `<div class="loading" style="color:#e74c3c">加载失败: ${escHtml(e.message)}</div>`;
+    }
+  }
+}
+
+function filterDiscover() {
+  const q = document.getElementById('discover-search').value.toLowerCase();
+  const filtered = discoverSkills.filter(s =>
+    s.name.toLowerCase().includes(q) || (s.description || '').toLowerCase().includes(q)
+  );
+  discoverPage = 1;
+  renderDiscover(filtered);
+}
+
+function renderDiscover(skills) {
+  const grid = document.getElementById('discover-grid');
+  if (!skills.length) {
+    grid.innerHTML = '<div class="loading" style="color:var(--text-muted)">暂无可发现的 Skill</div>';
+    return;
+  }
+  const totalPages = Math.ceil(skills.length / DISCOVER_PAGE_SIZE);
+  if (discoverPage > totalPages) discoverPage = totalPages;
+  const start = (discoverPage - 1) * DISCOVER_PAGE_SIZE;
+  const page = skills.slice(start, start + DISCOVER_PAGE_SIZE);
+  grid.innerHTML = page.map((s, i) => {
+    const desc = s.description || s.description_zh || '';
+    const needsTranslate = desc.length > 10 && (desc.match(/[一-鿿]/g) || []).length / desc.length < 0.15;
+    return `
+    <div class="card" onclick="openDiscoverDetail(${start + i})">
+      <div class="skill-name">${escHtml(s.name)}</div>
+      <div class="skill-desc">${escHtml(s.description_zh || desc || '暂无描述')}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+        <span style="font-size:12px;color:var(--text-muted)">${escHtml(s.repo_owner || '')}/${escHtml(s.repo_name || '')}${s.stars ? ` <span style="margin-left:4px">&#9733; ${s.stars >= 1000 ? (s.stars/1000).toFixed(1)+'k' : s.stars}</span>` : ''}</span>
+        <div style="display:flex;align-items:center;gap:6px">
+          ${needsTranslate && !s.description_zh ? `<button onclick="event.stopPropagation();translateDiscoverSkill(this)" data-name="${escHtml(s.name)}" data-desc="${escHtml(desc)}" style="padding:4px 10px;border:1px solid var(--accent);border-radius:4px;background:transparent;color:var(--accent);cursor:pointer;font-size:11px">翻译</button>` : ''}
+          ${s.installed
+            ? '<span style="font-size:12px;color:var(--accent);font-weight:500">✓ 已安装</span>'
+            : `<button onclick="event.stopPropagation();installFromDiscover('${escAttr(s.name)}','${escAttr(s.repo_owner)}','${escAttr(s.repo_name)}','${escAttr(s.repo_branch || 'main')}','${escAttr(s.directory)}')" style="padding:6px 14px;border:none;border-radius:6px;background:var(--accent);color:#fff;cursor:pointer;font-size:12px">安装</button>`
+          }
+        </div>
+      </div>
+    </div>`;
+  }).join('') + `
+    <div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 0">
+      <button onclick="discoverPageChange(${discoverPage - 1})" ${discoverPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
+      <span style="font-size:13px;color:var(--text-muted)">${discoverPage} / ${totalPages}</span>
+      <button onclick="discoverPageChange(${discoverPage + 1})" ${discoverPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
+    </div>
+  `;
+}
+
+function discoverPageChange(page) {
+  discoverPage = page;
+  renderDiscover(discoverSkills);
+  document.getElementById('view-discover').scrollIntoView({behavior: 'smooth'});
+}
+
+async function translateDiscoverSkill(el) {
+  const name = el.dataset.name;
+  const desc = el.dataset.desc;
+  // Toggle between translated and original
+  if (el.dataset.translated) {
+    // Show original
+    const descEl = el.closest('.card').querySelector('.skill-desc');
+    if (descEl) descEl.textContent = desc;
+    el.textContent = '翻译';
+    el.style.color = 'var(--accent)';
+    el.style.borderColor = 'var(--accent)';
+    el.style.pointerEvents = '';
+    delete el.dataset.translated;
+    return;
+  }
+  el.textContent = '翻译中...';
+  el.style.pointerEvents = 'none';
+  try {
+    const resp = await fetch('/api/translate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, desc})
+    });
+    const data = await resp.json();
+    if (data.zh) {
+      el.textContent = '原文';
+      el.style.color = 'var(--text-muted)';
+      el.style.borderColor = 'var(--text-muted)';
+      el.style.pointerEvents = '';
+      el.dataset.translated = '1';
+      const descEl = el.closest('.card').querySelector('.skill-desc');
+      if (descEl) descEl.textContent = data.zh;
+    } else {
+      el.textContent = '翻译';
+      el.style.pointerEvents = '';
+      alert('翻译失败：' + (data.detail || '未知错误'));
+    }
+  } catch (e) {
+    el.textContent = '翻译';
+    el.style.pointerEvents = '';
+    alert('翻译请求失败：' + e.message);
+  }
+}
+
+async function openDiscoverDetail(index) {
+  const s = discoverSkills[index];
+  if (!s) return;
+  const modal = document.getElementById('modal');
+  modal.innerHTML = `
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title">${escHtml(s.name)}</div>
+    <div class="modal-desc" style="margin-bottom:16px">
+      <div id="discover-detail-desc">${escHtml(s.description || '暂无描述')}</div>
+      ${s.description && s.description.length > 10 && (s.description.match(/[一-鿿]/g) || []).length / s.description.length < 0.15 ? `<button id="detail-translate-btn" data-name="${escHtml(s.name)}" data-desc="${escHtml(s.description)}" onclick="translateDetail(this)" style="margin-top:8px;padding:4px 12px;border:1px solid var(--accent);border-radius:6px;background:transparent;color:var(--accent);cursor:pointer;font-size:12px">翻译</button>` : ''}
+    </div>
+    <div class="modal-meta">
+      <span class="tag">${escHtml(s.repo_owner)}/${escHtml(s.repo_name)}</span>
+      <span>${escHtml(s.repo_branch || 'main')}</span>
+      <span>${escHtml(s.directory)}</span>
+    </div>
+    <div id="discover-detail-body" style="margin-top:16px">
+      <div class="loading" style="padding:16px">加载详情中...</div>
+    </div>
+    <div class="modal-actions" style="margin-top:20px">
+      ${!s.installed ? `<button class="btn primary" onclick="closeModal();installFromDiscover('${escAttr(s.name)}','${escAttr(s.repo_owner)}','${escAttr(s.repo_name)}','${escAttr(s.repo_branch || 'main')}','${escAttr(s.directory)}')">📦 安装</button>` : '<span style="color:var(--accent);font-weight:500;padding:8px 0">✓ 已安装</span>'}
+      <a href="https://github.com/${encodeURIComponent(s.repo_owner)}/${encodeURIComponent(s.repo_name)}/tree/${encodeURIComponent(s.repo_branch || 'main')}/${encodeURIComponent(s.directory)}" target="_blank" class="btn" style="text-decoration:none;display:inline-flex;align-items:center;gap:4px">🔗 GitHub</a>
+    </div>
+  `;
+  document.getElementById('modal-overlay').classList.add('show');
+
+  // Load full detail
+  try {
+    const params = new URLSearchParams({
+      owner: s.repo_owner, repo: s.repo_name,
+      branch: s.repo_branch || 'main', directory: s.directory
+    });
+    const data = await fetchJSON(`${API}/api/discover/skill?${params}`);
+    const bodyEl = document.getElementById('discover-detail-body');
+    const descEl = document.getElementById('discover-detail-desc');
+    if (data.description && data.description !== s.description) {
+      descEl.textContent = data.description;
+    }
+    let bodyHtml = '';
+    if (data.body) {
+      bodyHtml += `<div class="modal-section-title" style="margin-bottom:8px">说明文档</div>
+        <div style="background:var(--bg);border-radius:var(--radius-sm);padding:16px;font-size:13px;line-height:1.8;color:var(--text-secondary);max-height:400px;overflow-y:auto;white-space:pre-wrap;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">${escHtml(data.body)}</div>`;
+    }
+    if (data.files && data.files.length) {
+      bodyHtml += `<div class="modal-section-title" style="margin-top:16px;margin-bottom:8px">文件列表 (${data.files.length})</div>
+        <div class="file-list">${data.files.map(f => `<div>📄 ${escHtml(f)}</div>`).join('')}</div>`;
+    }
+    if (data.meta && Object.keys(data.meta).length) {
+      const metaItems = Object.entries(data.meta).map(([k, v]) => `<span style="font-size:12px;color:var(--text-muted)">${escHtml(k)}: ${escHtml(v)}</span>`).join(' · ');
+      bodyHtml += `<div style="margin-top:12px;font-size:12px;color:var(--text-muted)">${metaItems}</div>`;
+    }
+    bodyEl.innerHTML = bodyHtml || '<div style="color:var(--text-muted);padding:8px 0">暂无详细内容</div>';
+  } catch (e) {
+    document.getElementById('discover-detail-body').innerHTML =
+      `<div style="color:#e74c3c;padding:8px 0">加载失败: ${escHtml(e.message)}</div>`;
+  }
+}
+
+async function translateDetail(el) {
+  const name = el.dataset.name;
+  const desc = el.dataset.desc;
+  if (el.dataset.translated) {
+    document.getElementById('discover-detail-desc').textContent = desc;
+    el.textContent = '翻译';
+    el.style.color = 'var(--accent)';
+    el.style.borderColor = 'var(--accent)';
+    delete el.dataset.translated;
+    return;
+  }
+  el.textContent = '翻译中...';
+  el.style.pointerEvents = 'none';
+  try {
+    const resp = await fetch('/api/translate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name, desc})
+    });
+    const data = await resp.json();
+    if (data.zh) {
+      document.getElementById('discover-detail-desc').textContent = data.zh;
+      el.textContent = '原文';
+      el.style.color = 'var(--text-muted)';
+      el.style.borderColor = 'var(--text-muted)';
+      el.style.pointerEvents = '';
+      el.dataset.translated = '1';
+    } else {
+      el.textContent = '翻译';
+      el.style.pointerEvents = '';
+    }
+  } catch (e) {
+    el.textContent = '翻译';
+    el.style.pointerEvents = '';
+  }
+}
+
+async function installFromDiscover(name, owner, repo, branch, directory) {
+  if (!confirm(`确认安装 ${name}？`)) return;
+  try {
+    const resp = await fetch(`${API}/api/skills/install`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({owner, name: repo, branch, directory})
+    });
+    const data = await resp.json();
+    if (data.ok) {
+      alert(`安装成功: ${name}`);
+      loadDiscover();
+    } else {
+      alert('安装失败: ' + (data.detail || '未知错误'));
+    }
+  } catch (e) {
+    alert('安装失败: ' + e.message);
+  }
+}
+
+// ── Trending ──────────────────────
+async function loadTrending() {
+  const el = document.getElementById('trending-list');
+  el.innerHTML = '<div class="loading">正在加载 Trending...</div>';
+  try {
+    trendingRepos = await fetchJSON(`${API}/api/trending?since=${trendingSince}`);
+    renderTrending();
+  } catch (e) {
+    el.innerHTML = `<div class="loading" style="color:#e74c3c;padding:40px;text-align:center">加载失败: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function renderTrending() {
+  const el = document.getElementById('trending-list');
+  if (!trendingRepos.length) {
+    el.innerHTML = '<div style="color:var(--text-muted);padding:40px;text-align:center">暂无数据</div>';
+    return;
+  }
+  el.innerHTML = trendingRepos.map(r => `
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:16px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;background:var(--card-bg)">
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+          <a href="${escAttr(r.url)}" target="_blank" style="font-weight:600;font-size:14px;color:var(--accent);text-decoration:none">${escHtml(r.full_name)}</a>
+          ${r.language ? `<span style="font-size:11px;padding:2px 8px;border-radius:10px;background:var(--accent-bg,var(--bg));color:var(--accent)">${escHtml(r.language)}</span>` : ''}
+        </div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.4;margin-bottom:6px">${escHtml(r.description || '暂无描述')}</div>
+        ${r.topics.length ? `<div style="display:flex;flex-wrap:wrap;gap:4px">${r.topics.map(t => `<span style="font-size:11px;padding:2px 8px;border-radius:10px;border:1px solid var(--border);color:var(--text-muted)">${escHtml(t)}</span>`).join('')}</div>` : ''}
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-left:16px;flex-shrink:0">
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-muted)">
+          <span>&#9733;</span> ${r.stars.toLocaleString()}
+        </div>
+        <div style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--text-muted)">
+          <span>&#9654;</span> ${r.forks.toLocaleString()}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ── 更新 ──────────────────────
+async function loadUpdates() {
+  const el = document.getElementById('updates-list');
+  el.innerHTML = '<div class="loading" style="color:var(--text-muted);padding:40px;text-align:center">正在检查更新...</div>';
+  try {
+    updateList = await fetchJSON(`${API}/api/updates`);
+    renderUpdates();
+  } catch (e) {
+    el.innerHTML = `<div class="loading" style="color:#e74c3c;padding:40px;text-align:center">检查失败: ${escHtml(e.message)}</div>`;
+  }
+}
+
+function renderUpdates() {
+  const el = document.getElementById('updates-list');
+  const btnAll = document.getElementById('btn-update-all');
+  if (!updateList.length) {
+    el.innerHTML = '<div style="color:var(--text-muted);padding:40px;text-align:center">所有 Skill 均为最新版本</div>';
+    btnAll.style.display = 'none';
+    return;
+  }
+  btnAll.style.display = '';
+  el.innerHTML = updateList.map(u => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;background:var(--card-bg)">
+      <div>
+        <div style="font-weight:600;font-size:14px">${escHtml(u.name)}</div>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${escHtml(u.repo)} — ${escHtml(u.directory)}</div>
+      </div>
+      <button onclick="updateOne('${escAttr(u.name)}')" style="padding:6px 14px;border:none;border-radius:6px;background:var(--accent);color:#fff;cursor:pointer;font-size:12px">更新</button>
+    </div>
+  `).join('');
+}
+
+async function updateOne(name) {
+  try {
+    const resp = await fetch(`${API}/api/skills/${encodeURIComponent(name)}/update`, {method: 'POST'});
+    const data = await resp.json();
+    if (data.ok) {
+      alert(`更新成功: ${name}`);
+      loadUpdates();
+    } else {
+      alert('更新失败: ' + (data.detail || '未知错误'));
+    }
+  } catch (e) {
+    alert('更新失败: ' + e.message);
+  }
+}
+
+async function updateAll() {
+  const btn = document.getElementById('btn-update-all');
+  btn.textContent = '更新中...';
+  btn.disabled = true;
+  try {
+    const resp = await fetch(`${API}/api/updates/all`, {method: 'POST'});
+    const data = await resp.json();
+    alert(`已更新 ${data.updated} 个 Skill`);
+    loadUpdates();
+  } catch (e) {
+    alert('批量更新失败: ' + e.message);
+  }
+  btn.textContent = '全部更新';
+  btn.disabled = false;
+}
+
+// ── 仓库管理 ──────────────────────
+async function openRepoManager() {
+  document.getElementById('repo-modal').style.display = 'flex';
+  await renderRepoList();
+}
+
+async function renderRepoList() {
+  const repos = await fetchJSON(`${API}/api/repos`);
+  const el = document.getElementById('repo-list');
+  el.innerHTML = repos.map(r => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid var(--border);border-radius:8px;margin-bottom:6px;background:var(--bg)">
+      <div>
+        <span style="font-weight:500;font-size:13px">${escHtml(r.owner)}/${escHtml(r.name)}</span>
+        <span style="font-size:12px;color:var(--text-muted);margin-left:8px">${escHtml(r.branch || 'main')}</span>
+        ${!r.enabled ? '<span style="font-size:11px;color:#e74c3c;margin-left:6px">(已禁用)</span>' : ''}
+      </div>
+      <div style="display:flex;gap:6px">
+        <button onclick="toggleRepo('${escAttr(r.owner)}','${escAttr(r.name)}')" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:11px">${r.enabled ? '禁用' : '启用'}</button>
+        <button onclick="removeRepo('${escAttr(r.owner)}','${escAttr(r.name)}')" style="padding:4px 10px;border:1px solid #e74c3c;border-radius:4px;background:transparent;color:#e74c3c;cursor:pointer;font-size:11px">删除</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function addRepo() {
+  const input = document.getElementById('repo-input');
+  const branch = document.getElementById('repo-branch').value || 'main';
+  let val = input.value.trim();
+  val = val.replace(/^https?:\/\/github\.com\//, '').replace(/\.git$/, '');
+  const parts = val.split('/');
+  if (parts.length !== 2 || !parts[0] || !parts[1]) {
+    alert('请输入 owner/name 格式或 GitHub URL');
+    return;
+  }
+  try {
+    await fetch(`${API}/api/repos`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({owner: parts[0], name: parts[1], branch})
+    });
+    input.value = '';
+    await renderRepoList();
+  } catch (e) {
+    alert('添加失败: ' + e.message);
+  }
+}
+
+async function removeRepo(owner, name) {
+  if (!confirm(`确认删除仓库 ${owner}/${name}？`)) return;
+  await fetch(`${API}/api/repos/${owner}/${name}`, {method: 'DELETE'});
+  await renderRepoList();
+}
+
+async function toggleRepo(owner, name) {
+  await fetch(`${API}/api/repos/${owner}/${name}/toggle`, {method: 'PUT'});
+  await renderRepoList();
+}
+
+// ── 启动 ────────────────────────
+init();
+</script>
+</body>
+</html>

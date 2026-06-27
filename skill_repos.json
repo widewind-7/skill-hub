@@ -1,0 +1,26 @@
+[
+  {
+    "owner": "anthropics",
+    "name": "skills",
+    "branch": "main",
+    "enabled": true
+  },
+  {
+    "owner": "ComposioHQ",
+    "name": "awesome-claude-skills",
+    "branch": "master",
+    "enabled": true
+  },
+  {
+    "owner": "cexll",
+    "name": "myclaude",
+    "branch": "master",
+    "enabled": true
+  },
+  {
+    "owner": "JimLiu",
+    "name": "baoyu-skills",
+    "branch": "main",
+    "enabled": true
+  }
+]

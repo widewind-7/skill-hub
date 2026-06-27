@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.discover_cache.json
+.skill_cache.json
+.trending_cache.json
+.claude/
