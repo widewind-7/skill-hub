@@ -49,8 +49,29 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  min-height: 100vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+.page-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#view-skills,
+#view-discover,
+#view-trending,
+#view-updates,
+#view-agents {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── 顶部 ─────────────────────────── */
@@ -214,10 +235,13 @@ body {
 .grid {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px 40px;
+  padding: 0 24px 16px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
+  flex: 1;
+  overflow: hidden;
+  align-content: start;
 }
 
 .card {
@@ -776,6 +800,8 @@ body {
   <div class="view-toggle" id="view-toggle"></div>
 </div>
 
+<div class="page-content">
+
 <div id="view-skills">
   <div class="grid" id="grid">
     <div class="loading">加载中...</div>
@@ -797,7 +823,7 @@ body {
       <input id="discover-search" type="text" placeholder="搜索可安装的 Skill..." style="flex:1;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;background:var(--card-bg);color:var(--text);outline:none" oninput="filterDiscover()">
       <button onclick="openRepoManager()" style="margin-left:12px;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px">仓库管理</button>
     </div>
-    <div class="grid" id="discover-grid"><div class="loading">正在从 GitHub 获取 Skills...</div></div>
+    <div class="grid" id="discover-grid" style="flex:1;overflow:hidden;align-content:start"><div class="loading">正在从 GitHub 获取 Skills...</div></div>
   </div>
 </div>
 
@@ -853,6 +879,8 @@ body {
 
 <!-- Toast -->
 <div class="toast" id="toast"></div>
+
+</div><!-- /page-content -->
 
 <script>
 // ── 深色模式 ───────────────────────
@@ -913,13 +941,24 @@ let cachedCategories = [];
 let currentView = 'skills';
 let selectedAgent = null;
 let skillsPage = 1;
-const SKILLS_PAGE_SIZE = 48;
+let SKILLS_PAGE_SIZE = 12;
 let discoverSkills = [];
 let discoverPage = 1;
-const DISCOVER_PAGE_SIZE = 48;
+let DISCOVER_PAGE_SIZE = 12;
 let updateList = [];
 let trendingRepos = [];
 let trendingSince = 'daily';
+
+function calcPageSize(gridEl, cardHeight) {
+  if (!gridEl) return 12;
+  const rect = gridEl.getBoundingClientRect();
+  const availableH = window.innerHeight - rect.top - 40;
+  if (availableH < 100) return 12;
+  const usableW = (gridEl.clientWidth || 1200) - 48; // padding 24px × 2
+  const cols = Math.max(1, Math.floor((usableW + 16) / 296));
+  const rows = Math.max(1, Math.floor((availableH + 16) / (cardHeight + 16)));
+  return Math.max(cols * rows, cols);
+}
 
 // ── 初始化 ──────────────────────
 async function init() {
@@ -1037,6 +1076,7 @@ function renderStats() {
 
 // ── 卡片网格 ────────────────────
 function renderGrid() {
+  SKILLS_PAGE_SIZE = calcPageSize(document.getElementById('grid'), 140);
   const grid = document.getElementById('grid');
   if (!allSkills.length) {
     grid.innerHTML = `<div class="empty"><div class="icon">📭</div><div>没有找到匹配的 Skill</div></div>`;
@@ -1078,7 +1118,6 @@ function renderGrid() {
 function skillsPageChange(page) {
   skillsPage = page;
   renderGrid();
-  document.getElementById('view-skills').scrollIntoView({behavior: 'smooth'});
 }
 
 // ── 详情弹窗 ────────────────────
@@ -1335,6 +1374,7 @@ function filterDiscover() {
 }
 
 function renderDiscover(skills) {
+  DISCOVER_PAGE_SIZE = calcPageSize(document.getElementById('discover-grid'), 200);
   const grid = document.getElementById('discover-grid');
   if (!skills.length) {
     grid.innerHTML = '<div class="loading" style="color:var(--text-muted)">暂无可发现的 Skill</div>';
@@ -1374,7 +1414,6 @@ function renderDiscover(skills) {
 function discoverPageChange(page) {
   discoverPage = page;
   renderDiscover(discoverSkills);
-  document.getElementById('view-discover').scrollIntoView({behavior: 'smooth'});
 }
 
 async function translateDiscoverSkill(el) {
