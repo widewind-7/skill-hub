@@ -806,6 +806,7 @@ body {
   <div class="grid" id="grid">
     <div class="loading">加载中...</div>
   </div>
+  <div id="skills-pagination" style="display:flex;justify-content:center;align-items:center;gap:12px;padding:8px 0 12px;flex-shrink:0"></div>
 </div>
 
 <div id="view-agents" style="display:none">
@@ -824,6 +825,7 @@ body {
       <button onclick="openRepoManager()" style="margin-left:12px;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px">仓库管理</button>
     </div>
     <div class="grid" id="discover-grid" style="flex:1;overflow:hidden;align-content:start"><div class="loading">正在从 GitHub 获取 Skills...</div></div>
+    <div id="discover-pagination" style="display:flex;justify-content:center;align-items:center;gap:12px;padding:8px 0 12px;flex-shrink:0"></div>
   </div>
 </div>
 
@@ -1106,12 +1108,13 @@ function renderGrid() {
         </div>
       </div>
     `;
-  }).join('') + `
-    <div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 0">
-      <button onclick="skillsPageChange(${skillsPage - 1})" ${skillsPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
-      <span style="font-size:13px;color:var(--text-muted)">${skillsPage} / ${totalPages}</span>
-      <button onclick="skillsPageChange(${skillsPage + 1})" ${skillsPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
-    </div>
+  }).join('');
+
+  const pag = document.getElementById('skills-pagination');
+  pag.innerHTML = `
+    <button onclick="skillsPageChange(${skillsPage - 1})" ${skillsPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
+    <span style="font-size:13px;color:var(--text-muted)">${skillsPage} / ${totalPages}</span>
+    <button onclick="skillsPageChange(${skillsPage + 1})" ${skillsPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
   `;
 }
 
@@ -1402,12 +1405,13 @@ function renderDiscover(skills) {
         </div>
       </div>
     </div>`;
-  }).join('') + `
-    <div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 0">
-      <button onclick="discoverPageChange(${discoverPage - 1})" ${discoverPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
-      <span style="font-size:13px;color:var(--text-muted)">${discoverPage} / ${totalPages}</span>
-      <button onclick="discoverPageChange(${discoverPage + 1})" ${discoverPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
-    </div>
+  }).join('');
+
+  const pag = document.getElementById('discover-pagination');
+  pag.innerHTML = `
+    <button onclick="discoverPageChange(${discoverPage - 1})" ${discoverPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
+    <span style="font-size:13px;color:var(--text-muted)">${discoverPage} / ${totalPages}</span>
+    <button onclick="discoverPageChange(${discoverPage + 1})" ${discoverPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
   `;
 }
 
