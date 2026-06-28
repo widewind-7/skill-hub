@@ -49,29 +49,7 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
   -webkit-font-smoothing: antialiased;
-}
-
-.page-content {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-#view-skills,
-#view-discover,
-#view-trending,
-#view-updates,
-#view-agents {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
 }
 
 /* ── 顶部 ─────────────────────────── */
@@ -235,13 +213,10 @@ body {
 .grid {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px 16px;
+  padding: 0 24px 40px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
-  flex: 1;
-  overflow: hidden;
-  align-content: start;
 }
 
 .card {
@@ -800,13 +775,10 @@ body {
   <div class="view-toggle" id="view-toggle"></div>
 </div>
 
-<div class="page-content">
-
 <div id="view-skills">
   <div class="grid" id="grid">
     <div class="loading">加载中...</div>
   </div>
-  <div id="skills-pagination" style="display:flex;justify-content:center;align-items:center;gap:12px;padding:8px 0 12px;flex-shrink:0"></div>
 </div>
 
 <div id="view-agents" style="display:none">
@@ -824,8 +796,7 @@ body {
       <input id="discover-search" type="text" placeholder="搜索可安装的 Skill..." style="flex:1;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;background:var(--card-bg);color:var(--text);outline:none" oninput="filterDiscover()">
       <button onclick="openRepoManager()" style="margin-left:12px;padding:10px 16px;border:1px solid var(--border);border-radius:var(--radius);background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px">仓库管理</button>
     </div>
-    <div class="grid" id="discover-grid" style="flex:1;overflow:hidden;align-content:start"><div class="loading">正在从 GitHub 获取 Skills...</div></div>
-    <div id="discover-pagination" style="display:flex;justify-content:center;align-items:center;gap:12px;padding:8px 0 12px;flex-shrink:0"></div>
+    <div class="grid" id="discover-grid"><div class="loading">正在从 GitHub 获取 Skills...</div></div>
   </div>
 </div>
 
@@ -943,24 +914,13 @@ let cachedCategories = [];
 let currentView = 'skills';
 let selectedAgent = null;
 let skillsPage = 1;
-let SKILLS_PAGE_SIZE = 12;
+const SKILLS_PAGE_SIZE = 15;
 let discoverSkills = [];
 let discoverPage = 1;
-let DISCOVER_PAGE_SIZE = 12;
+const DISCOVER_PAGE_SIZE = 15;
 let updateList = [];
 let trendingRepos = [];
 let trendingSince = 'daily';
-
-function calcPageSize(gridEl, cardHeight) {
-  if (!gridEl) return 12;
-  const rect = gridEl.getBoundingClientRect();
-  const availableH = window.innerHeight - rect.top - 40;
-  if (availableH < 100) return 12;
-  const usableW = (gridEl.clientWidth || 1200) - 48; // padding 24px × 2
-  const cols = Math.max(1, Math.floor((usableW + 16) / 296));
-  const rows = Math.max(1, Math.floor((availableH + 16) / (cardHeight + 16)));
-  return Math.max(cols * rows, cols);
-}
 
 // ── 初始化 ──────────────────────
 async function init() {
@@ -1078,7 +1038,6 @@ function renderStats() {
 
 // ── 卡片网格 ────────────────────
 function renderGrid() {
-  SKILLS_PAGE_SIZE = calcPageSize(document.getElementById('grid'), 140);
   const grid = document.getElementById('grid');
   if (!allSkills.length) {
     grid.innerHTML = `<div class="empty"><div class="icon">📭</div><div>没有找到匹配的 Skill</div></div>`;
@@ -1108,13 +1067,12 @@ function renderGrid() {
         </div>
       </div>
     `;
-  }).join('');
-
-  const pag = document.getElementById('skills-pagination');
-  pag.innerHTML = `
-    <button onclick="skillsPageChange(${skillsPage - 1})" ${skillsPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
-    <span style="font-size:13px;color:var(--text-muted)">${skillsPage} / ${totalPages}</span>
-    <button onclick="skillsPageChange(${skillsPage + 1})" ${skillsPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
+  }).join('') + `
+    <div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 0">
+      <button onclick="skillsPageChange(${skillsPage - 1})" ${skillsPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
+      <span style="font-size:13px;color:var(--text-muted)">${skillsPage} / ${totalPages}</span>
+      <button onclick="skillsPageChange(${skillsPage + 1})" ${skillsPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${skillsPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
+    </div>
   `;
 }
 
@@ -1377,7 +1335,6 @@ function filterDiscover() {
 }
 
 function renderDiscover(skills) {
-  DISCOVER_PAGE_SIZE = calcPageSize(document.getElementById('discover-grid'), 200);
   const grid = document.getElementById('discover-grid');
   if (!skills.length) {
     grid.innerHTML = '<div class="loading" style="color:var(--text-muted)">暂无可发现的 Skill</div>';
@@ -1405,13 +1362,12 @@ function renderDiscover(skills) {
         </div>
       </div>
     </div>`;
-  }).join('');
-
-  const pag = document.getElementById('discover-pagination');
-  pag.innerHTML = `
-    <button onclick="discoverPageChange(${discoverPage - 1})" ${discoverPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
-    <span style="font-size:13px;color:var(--text-muted)">${discoverPage} / ${totalPages}</span>
-    <button onclick="discoverPageChange(${discoverPage + 1})" ${discoverPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
+  }).join('') + `
+    <div style="grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:12px;padding:16px 0">
+      <button onclick="discoverPageChange(${discoverPage - 1})" ${discoverPage <= 1 ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage <= 1 ? 'opacity:0.4' : ''}">&lt; 上一页</button>
+      <span style="font-size:13px;color:var(--text-muted)">${discoverPage} / ${totalPages}</span>
+      <button onclick="discoverPageChange(${discoverPage + 1})" ${discoverPage >= totalPages ? 'disabled' : ''} style="padding:6px 14px;border:1px solid var(--border);border-radius:6px;background:var(--card-bg);color:var(--text);cursor:pointer;font-size:13px;${discoverPage >= totalPages ? 'opacity:0.4' : ''}">下一页 &gt;</button>
+    </div>
   `;
 }
 
