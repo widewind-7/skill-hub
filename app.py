@@ -55,21 +55,213 @@ AGENT_DIRS = {
 }
 
 CATEGORY_MAP = {
-    "design-system": "创意设计", "creative-direction": "创意设计", "prototype": "创意设计",
-    "video": "视频制作", "animation": "视频制作",
+    "design-system": "设计系统", "creative-direction": "设计系统", "prototype": "设计系统",
+    "video": "视频与动画", "animation": "视频与动画",
     "marketing-creative": "内容创作", "copywriting": "内容创作",
     "development": "开发工具", "devops": "开发工具",
-    "data": "数据分析", "research": "学术研究",
-    "productivity": "效率工具", "ai-ml": "AI/ML",
+    "data": "数据分析", "research": "数据分析",
+    "productivity": "工作流", "ai-ml": "图像生成",
 }
 
+# 手动分类表：name → category（优先级最高）
+MANUAL_CAT: dict[str, str] = {
+    # 视频与动画
+    "8-bit-orbit-video-template": "视频与动画", "after-hours-editorial-template": "视频与动画",
+    "algorithmic-art": "视频与动画", "animejs": "视频与动画",
+    "css-animations": "视频与动画", "compose-motion": "视频与动画",
+    "emilkowalski-motion": "视频与动画", "gsap": "视频与动画",
+    "gsap-core": "视频与动画", "gsap-frameworks": "视频与动画",
+    "gsap-performance": "视频与动画", "gsap-plugins": "视频与动画",
+    "gsap-react": "视频与动画", "gsap-scrolltrigger": "视频与动画",
+    "gsap-timeline": "视频与动画", "gsap-utils": "视频与动画",
+    "hyperframes": "视频与动画", "hyperframes-cli": "视频与动画",
+    "hyperframes-media": "视频与动画", "hyperframes-registry": "视频与动画",
+    "lottie": "视频与动画", "motion-principles": "视频与动画",
+    "remotion": "视频与动画", "remotion-add-cli-option": "视频与动画",
+    "remotion-add-effect": "视频与动画", "remotion-add-expert": "视频与动画",
+    "remotion-add-new-package": "视频与动画", "remotion-add-sfx": "视频与动画",
+    "remotion-best-practices": "视频与动画", "remotion-docs-demo": "视频与动画",
+    "remotion-fix-dependabot": "视频与动画", "remotion-flake": "视频与动画",
+    "remotion-issue": "视频与动画", "remotion-issue-management": "视频与动画",
+    "remotion-pr": "视频与动画", "remotion-pr-name": "视频与动画",
+    "remotion-pr-ready": "视频与动画", "remotion-skills": "视频与动画",
+    "remotion-to-hyperframes": "视频与动画", "remotion-update-version": "视频与动画",
+    "remotion-version": "视频与动画", "remotion-video-report": "视频与动画",
+    "remotion-visual-mode": "视频与动画", "remotion-web-renderer-test": "视频与动画",
+    "remotion-writing-docs": "视频与动画",
+    "shader-dev": "视频与动画", "three": "视频与动画", "threejs": "视频与动画",
+    "typegpu": "视频与动画", "waapi": "视频与动画",
+    "video-hyperframes": "视频与动画", "video-spec-builder": "视频与动画",
+    "vfx-text-cursor": "视频与动画", "srt-hyperframes-editorial-video": "视频与动画",
+    "srt-remotion-video": "视频与动画", "sora": "视频与动画",
+    "venice-video": "视频与动画", "whiteboard-animation": "视频与动画",
+    "whiteboard-video-workflow": "视频与动画",
+    "website-to-hyperframes": "视频与动画", "web-video-presentation": "视频与动画",
+    "website-to-video": "视频与动画", "youtube-clipper": "视频与动画",
+    "image-to-video": "视频与动画", "html-to-video-skill": "视频与动画",
+    "html-to-hyperframes": "视频与动画", "ffmpeg-video-builder": "视频与动画",
+    "frame-data-chart-nyt": "视频与动画", "frame-flowchart-sticky": "视频与动画",
+    "frame-glitch-title": "视频与动画", "frame-light-leak-cinema": "视频与动画",
+    "frame-liquid-bg-hero": "视频与动画", "frame-logo-outro": "视频与动画",
+    "frame-macos-notification": "视频与动画",
+    # 图像生成
+    "fal-3d": "图像生成", "fal-generate": "图像生成", "fal-image-edit": "图像生成",
+    "fal-kling-o3": "图像生成", "fal-lip-sync": "图像生成", "fal-realtime": "图像生成",
+    "fal-restore": "图像生成", "fal-train": "图像生成", "fal-tryon": "图像生成",
+    "fal-upscale": "图像生成", "fal-video-edit": "图像生成", "fal-vision": "图像生成",
+    "venice-image-edit": "图像生成", "venice-image-generate": "图像生成",
+    "gpt-image-2": "图像生成", "imagen": "图像生成", "imagegen": "图像生成",
+    "imagegen-frontend-mobile": "图像生成", "imagegen-frontend-web": "图像生成",
+    "image-enhancer": "图像生成", "image-to-code": "图像生成",
+    "image-to-code-skill": "图像生成", "mockup-device-3d": "图像生成",
+    "pixelbin-media": "图像生成", "poster-hero": "图像生成",
+    "hatch-pet": "图像生成", "replicate": "图像生成",
+    "ecommerce-image-workflow": "图像生成", "ai-image-prompts-skill": "图像生成",
+    # 设计系统
+    "figma-code-connect-components": "设计系统", "figma-create-design-system-rules": "设计系统",
+    "figma-create-new-file": "设计系统", "figma-generate-design": "设计系统",
+    "figma-generate-library": "设计系统", "figma-implement-design": "设计系统",
+    "figma-use": "设计系统",
+    "codebase-design": "设计系统", "color-expert": "设计系统",
+    "design-audit": "设计系统", "design-brief": "设计系统",
+    "design-consultation": "设计系统", "design-md": "设计系统",
+    "design-review": "设计系统", "design-taste-frontend": "设计系统",
+    "design-taste-frontend-v1": "设计系统", "creative-director": "设计系统",
+    "brand-guidelines": "设计系统", "brandkit": "设计系统",
+    "brutalist-skill": "设计系统", "canvas-design": "设计系统",
+    "high-end-visual-design": "设计系统", "impeccable": "设计系统",
+    "impeccable-design-polish": "设计系统", "industrial-brutalist-ui": "设计系统",
+    "minimalist-skill": "设计系统", "minimalist-ui": "设计系统",
+    "open-design": "设计系统", "opendesign": "设计系统",
+    "plan-design-review": "设计系统", "premium-design": "设计系统",
+    "redesign-existing-projects": "设计系统", "redesign-skill": "设计系统",
+    "reference-design-contract": "设计系统", "soft-skill": "设计系统",
+    "stitch-design-taste": "设计系统", "stitch-loop": "设计系统", "stitch-skill": "设计系统",
+    "styleseed-design-review": "设计系统", "swiftui-design": "设计系统",
+    "taste-skill": "设计系统", "taste-skill-v1": "设计系统",
+    "doc-kami-parchment": "设计系统", "gpt-taste": "设计系统", "gpt-tasteskill": "设计系统",
+    "enhance-prompt": "设计系统", "ss-motion": "设计系统", "ss-page": "设计系统",
+    "ss-tokens": "设计系统", "ui-skills": "设计系统", "ui-ux-pro-max": "设计系统",
+    "shadcn-ui": "设计系统", "login-flow": "设计系统",
+    "domain-modeling": "设计系统", "prototype": "设计系统",
+    # 幻灯片演示
+    "nanobanana-ppt": "幻灯片演示", "ppt-keynote": "幻灯片演示",
+    "pptx": "幻灯片演示", "pptx-generator": "幻灯片演示",
+    "pptx-html-fidelity-audit": "幻灯片演示", "theme-factory": "幻灯片演示",
+    "deck-guizang-editorial": "幻灯片演示", "deck-open-slide-canvas": "幻灯片演示",
+    "deck-swiss-international": "幻灯片演示",
+    "digits-fintech-swiss-template": "幻灯片演示",
+    "editorial-burgundy-principles-template": "幻灯片演示",
+    "html-ppt-retro-quarterly-review": "幻灯片演示",
+    "swiss-creative-mode-template": "幻灯片演示",
+    "swiss-user-research-video-template": "幻灯片演示",
+    # 内容创作
+    "beautiful-article": "内容创作", "article-magazine": "内容创作",
+    "copywriting": "内容创作", "ad-creative": "内容创作",
+    "short-video-script": "内容创作", "script-voice-video": "内容创作",
+    "khazix-writer": "内容创作", "marketing-psychology": "内容创作",
+    "competitive-ads-extractor": "内容创作",
+    "card-twitter": "内容创作", "card-xiaohongshu": "内容创作",
+    "cheat-on-content": "内容创作", "cheat-init": "内容创作",
+    "cheat-bump": "内容创作", "cheat-learn-from": "内容创作",
+    "cheat-migrate": "内容创作", "cheat-persona": "内容创作",
+    "cheat-predict": "内容创作", "cheat-publish": "内容创作",
+    "cheat-recommend": "内容创作", "cheat-retro": "内容创作",
+    "cheat-score": "内容创作", "cheat-seed": "内容创作",
+    "cheat-shoot": "内容创作", "cheat-status": "内容创作",
+    "cheat-trends": "内容创作",
+    "video-laping-script": "内容创作", "video-laping-sop": "内容创作",
+    "video-replication": "内容创作", "video-downloader": "内容创作",
+    "lapan": "内容创作", "paywall-upgrade-cro": "内容创作",
+    # 数据与分析
+    "a-stock-data": "数据分析", "data-report": "数据分析",
+    "d3-visualization": "数据分析", "cheat-score-blind": "数据分析",
+    "storage-analyzer": "数据分析",
+    # 社交媒体
+    "bilibili-comments": "社交媒体", "bili-daily-update-check": "社交媒体",
+    "bili-following-latest": "社交媒体", "douyin-comments": "社交媒体",
+    "slack-gif-creator": "社交媒体", "social-reddit-card": "社交媒体",
+    "social-spotify-card": "社交媒体", "social-x-post-card": "社交媒体",
+    # 文档处理
+    "doc": "文档处理", "docx": "文档处理", "pdf": "文档处理",
+    "minimax-docx": "文档处理", "minimax-pdf": "文档处理",
+    "release-notes-one-pager": "文档处理", "resume-modern": "文档处理",
+    # 浏览器自动化
+    "agent-browser": "浏览器自动化", "playwright": "浏览器自动化",
+    "full-page-screenshot": "浏览器自动化", "screenshot": "浏览器自动化",
+    "screenshots-marketing": "浏览器自动化",
+    # 音频与音乐
+    "ai-music-album": "音频与音乐", "speech": "音频与音乐",
+    "venice-audio-music": "音频与音乐", "venice-audio-speech": "音频与音乐",
+    # 平台规范
+    "apple-hig": "平台规范", "platform-design": "平台规范",
+    "web-design-guidelines": "平台规范", "wpds": "平台规范",
+    # 开发工具
+    "diagnosing-bugs": "开发工具", "systematic-debugging": "开发工具",
+    "export-download-debugging": "开发工具",
+    "finishing-a-development-branch": "开发工具",
+    "git-guardrails-claude-code": "开发工具",
+    "pr-feedback-quality-gate": "开发工具", "receiving-code-review": "开发工具",
+    "requesting-code-review": "开发工具", "resolving-merge-conflicts": "开发工具",
+    "setup-pre-commit": "开发工具", "migrate-to-shoehorn": "开发工具",
+    "scaffold-exercises": "开发工具", "teach": "开发工具",
+    "test-driven-development": "开发工具", "tdd": "开发工具",
+    "verification-before-completion": "开发工具",
+    "implement": "开发工具", "improve-codebase-architecture": "开发工具",
+    "neat-freak": "开发工具",
+    "gemini-web-extended-thinking": "开发工具",
+    "full-output-enforcement": "开发工具", "output-skill": "开发工具",
+    "code-review": "开发工具",
+    # 工作流
+    "brainstorming": "工作流", "grill-me": "工作流", "grill-with-docs": "工作流",
+    "grilling": "工作流",
+    "hand-drawn-diagrams": "工作流", "handoff": "工作流",
+    "executing-plans": "工作流", "dispatching-parallel-agents": "工作流",
+    "subagent-driven-development": "工作流",
+    "finishing-a-development-branch": "工作流",
+    "using-git-worktrees": "工作流", "using-superpowers": "工作流",
+    "writing-plans": "工作流", "writing-skills": "工作流",
+    "to-issues": "工作流", "to-prd": "工作流", "triage": "工作流",
+    "kb-retriever": "工作流", "ask-matt": "工作流",
+    "research-decision-room": "工作流", "domain-name-brainstormer": "工作流",
+    "contribute-catalog": "工作流",
+    "travel-plan-viz": "工作流", "faq-page": "工作流",
+    "setup-matt-pocock-skills": "工作流",
+    "remotion-add-cli-option": "工作流",
+    "flutter-animating-apps": "前端开发", "frontend-design": "前端开发",
+    "frontend-dev": "前端开发", "frontend-skill": "前端开发",
+    "frontend-slides": "前端开发", "tailwind": "前端开发",
+    "artifacts-builder": "前端开发", "web-artifacts-builder": "前端开发",
+    "web-design-engineer": "前端开发",
+    "deep-research": "工作流",
+    # 修正分类
+    "agent-reach": "工作流",
+    "aihot": "工作流",
+    "field-notes-editorial-template": "文档处理",
+}
+
+# 关键词后备分类（按优先级排列）
 CAT_KEYWORDS = [
-    (["video", "remotion", "animat", "lottie", "gsap", "motion", "hyperframe"], "视频制作"),
-    (["design", "figma", "ui", "ux", "prototype", "css", "tailwind", "shadcn"], "创意设计"),
-    (["write", "copy", "article", "content", "blog", "marketing"], "内容创作"),
-    (["code", "dev", "git", "test", "debug", "api", "cli"], "开发工具"),
-    (["data", "stock", "chart", "analytics", "research"], "数据分析"),
-    (["ai", "llm", "model", "prompt"], "AI/ML"),
+    (["hyperframe", "remotion", "srt-", "gsap", "motion", "lottie", "anime", "waapi",
+      "frame-", "shader", "vfx", "three", "typegpu"], "视频与动画"),
+    (["fal-", "venice-image", "gpt-image", "imagen", "imagegen", "image-to-code",
+      "image-enhancer", "mockup", "pixelbin", "poster", "replicate", "upscale",
+      "3d-model", "ai-image"], "图像生成"),
+    (["figma", "design-system", "design-token", "taste-skill", "impeccable",
+      "redesign", "brand", "figma-"], "设计系统"),
+    (["design", "ui-skill", "ux-skill", "prototype", "figma"], "设计系统"),
+    (["ppt", "slide", "presentation", "keynote", "deck-"], "幻灯片演示"),
+    (["article", "copywriting", "content", "script", "writer", "写作", "文案"], "内容创作"),
+    (["video", "animation", "animat"], "视频与动画"),
+    (["stock", "data-report", "chart", "visualization", "analytics"], "数据分析"),
+    (["docx", "pdf", "document", "文档"], "文档处理"),
+    (["browser", "playwright", "screenshot", "crawl", "scrape"], "浏览器自动化"),
+    (["audio", "music", "speech", "voice", "tts"], "音频与音乐"),
+    (["social", "twitter", "reddit", "bilibili", "douyin", "slack", "weibo"], "社交媒体"),
+    (["platform-design", "hig", "material-design", "guideline", "wpds"], "平台规范"),
+    (["debug", "test", "tdd", "git-", "code-review", "pr-", "hook", "commit"], "开发工具"),
+    (["plan", "workflow", "agent", "triage", "dispatch", "brainstorm"], "工作流"),
+    (["frontend", "css", "tailwind", "react", "shadcn", "html"], "前端开发"),
 ]
 
 FRONTMATTER_RE = re.compile(r"^---\s*\n(.*?)\n---\s*\n", re.DOTALL)
@@ -320,16 +512,23 @@ def parse_skill_md(path: Path) -> dict:
     return result
 
 
-def classify_skill(meta: dict) -> str:
+def classify_skill(meta: dict, skill_name: str = "") -> str:
+    name = meta.get("name", "") or skill_name
+    # 1. 手动分类表
+    if name in MANUAL_CAT:
+        return MANUAL_CAT[name]
+    if skill_name and skill_name in MANUAL_CAT:
+        return MANUAL_CAT[skill_name]
+    # 2. od.category 元数据
     od = meta.get("od", {})
     if isinstance(od, dict):
         cat = od.get("category", "")
         if cat in CATEGORY_MAP:
             return CATEGORY_MAP[cat]
-
-    combined = f"{meta.get('name','') or ''} {meta.get('description','') or ''}".lower()
+    # 3. 关键词匹配（name 优先，再匹配 description）
+    combined = f"{name} {meta.get('description','') or ''}".lower()
     for kws, label in CAT_KEYWORDS:
-        if any(k in combined for k in kws):
+        if any(k in name.lower() for k in kws) or any(k in combined for k in kws):
             return label
     return "其他"
 
@@ -498,7 +697,7 @@ def _do_scan() -> dict[str, SkillMeta]:
                     except Exception:
                         file_count = 0
 
-                category = classify_skill(meta_dict)
+                category = classify_skill(meta_dict, skill_name)
 
                 # 提取 homepage：od.upstream > homepage > url
                 od = meta_dict.get("od", {})
